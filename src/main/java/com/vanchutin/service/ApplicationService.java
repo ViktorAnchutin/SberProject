@@ -10,10 +10,10 @@ public class ApplicationService {
     private DeviceUpdaterService deviceUpdater;
 
     public void processEventQueue(Queue<Event> queue){
-        for(Event event : queue){
+        queue.forEach(event-> {
             eventService.process(event);
             deviceUpdater.update(event.getDeviceId());
-        }
+        });
     }
 
     public void setEventService(ProcessEventService eventService) {
