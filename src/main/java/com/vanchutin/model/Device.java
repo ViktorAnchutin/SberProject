@@ -1,6 +1,7 @@
 package com.vanchutin.model;
 
 import com.vanchutin.model.utils.Status;
+import lombok.Data;
 
 import javax.persistence.*;
 import java.util.*;
@@ -9,7 +10,7 @@ import java.util.*;
 @Entity
 @Table(name = "devices")
 @Cacheable(false)
-public class Device {
+public @Data class Device {
 
     public Device(){}
 
@@ -27,35 +28,4 @@ public class Device {
 
     @Enumerated(EnumType.STRING)
     private Status status;
-
-  /*  @OneToMany(mappedBy = "device", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Component> components; */
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Status getStatus() {
-        return status;
-    }
-
-    public void setStatus(Status status) {
-        this.status = status;
-    }
-
-    public void setComponents(List<Component> components){
-    //    this.components = components;
-    }
 }
