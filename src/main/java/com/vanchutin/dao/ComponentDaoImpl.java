@@ -82,7 +82,8 @@ public class ComponentDaoImpl implements ComponentDao{
 
         em.getTransaction().commit();
         em.close();
-
         return  result.intValue();
     }
+
+
 }

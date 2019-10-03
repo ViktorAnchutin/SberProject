@@ -9,7 +9,6 @@ import java.util.*;
 
 @Entity
 @Table(name = "devices")
-@Cacheable(false)
 public @Data class Device {
 
     public Device(){}
@@ -28,4 +27,9 @@ public @Data class Device {
 
     @Enumerated(EnumType.STRING)
     private Status status;
+
+    @OneToMany(mappedBy = "device")
+    private Set<DeviceComponent> deviceComponents;
+
+
 }

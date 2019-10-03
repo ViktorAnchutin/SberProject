@@ -9,6 +9,7 @@ import com.vanchutin.event.Event;
 import com.vanchutin.event.RestoreEvent;
 import com.vanchutin.model.Component;
 import com.vanchutin.model.Device;
+import com.vanchutin.model.DeviceComponent;
 import com.vanchutin.model.utils.Status;
 import com.vanchutin.service.ApplicationService;
 import com.vanchutin.service.DeviceUpdaterService;
@@ -38,7 +39,7 @@ public class Application {
         service.setUpdaterService(deviceUpdaterService);
 
         // create event queue
-        Queue<Event> eventQueue = new LinkedList<Event>();
+  /*      Queue<Event> eventQueue = new LinkedList<Event>();
         eventQueue.add(new ErrorEvent(48, 49));
         eventQueue.add(new ErrorEvent(48, 50));
         eventQueue.add(new ErrorEvent(48, 51));
@@ -46,6 +47,16 @@ public class Application {
         eventQueue.add(new RestoreEvent(48, 49));
         eventQueue.add(new RestoreEvent(48, 50));
         // process event queue
-        service.processEventQueue(eventQueue);
+        service.processEventQueue(eventQueue); */
+
+
+
+
+
     }
+
+
+
+
+
 }
