@@ -3,6 +3,7 @@ package com.vanchutin.event;
 public class ErrorEvent extends Event {
 
 
+    public ErrorEvent(){}
     public ErrorEvent(Integer deviceId, Integer componentId)
     {
         this.componentId = componentId;

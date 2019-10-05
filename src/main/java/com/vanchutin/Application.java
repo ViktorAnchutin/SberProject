@@ -1,9 +1,7 @@
 package com.vanchutin;
 
 import com.vanchutin.dao.DeviceDao;
-import com.vanchutin.event.ErrorEvent;
-import com.vanchutin.event.Event;
-import com.vanchutin.event.RestoreEvent;
+import com.vanchutin.event.*;
 import com.vanchutin.service.ApplicationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -20,6 +18,9 @@ public class Application implements CommandLineRunner {
 	@Autowired
 	ApplicationService service;
 
+	@Autowired
+	EventFactory eventFactory;
+
 	public static void main(String[] args) {
 		SpringApplication.run(Application.class, args);
 	}
@@ -29,12 +30,12 @@ public class Application implements CommandLineRunner {
 		System.out.println("Hello");
 
 		Queue<Event> eventQueue = new LinkedList<Event>();
-		eventQueue.add(new ErrorEvent(1, 1));
-		eventQueue.add(new ErrorEvent(1, 2));
-		eventQueue.add(new ErrorEvent(1, 3));
-		eventQueue.add(new RestoreEvent(1, 3));
-		eventQueue.add(new RestoreEvent(1, 2));
-		eventQueue.add(new RestoreEvent(1, 1));
+		eventQueue.add(eventFactory.getEvent(EventType.ERROR, 1, 1));
+		eventQueue.add(eventFactory.getEvent(EventType.ERROR, 1, 2));
+		eventQueue.add(eventFactory.getEvent(EventType.ERROR, 1, 3));
+		eventQueue.add(eventFactory.getEvent(EventType.RESTORE, 1, 3));
+		eventQueue.add(eventFactory.getEvent(EventType.RESTORE, 1, 2));
+		eventQueue.add(eventFactory.getEvent(EventType.RESTORE, 1, 1));
 
 		// process event queue
 		service.processEventQueue(eventQueue);

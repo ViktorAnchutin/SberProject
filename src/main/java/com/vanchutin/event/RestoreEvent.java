@@ -2,6 +2,7 @@ package com.vanchutin.event;
 
 public class RestoreEvent extends Event {
 
+    public RestoreEvent(){};
     public RestoreEvent(Integer deviceId, Integer componentId)
     {
         this.componentId = componentId;

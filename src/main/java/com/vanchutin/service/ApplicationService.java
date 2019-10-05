@@ -2,6 +2,7 @@ package com.vanchutin.service;
 
 
 import com.vanchutin.event.Event;
+import com.vanchutin.service.processEvent.ProcessEventService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
