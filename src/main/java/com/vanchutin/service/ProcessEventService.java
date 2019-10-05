@@ -4,15 +4,14 @@ import com.vanchutin.dao.ComponentDao;
 import com.vanchutin.event.ErrorEvent;
 import com.vanchutin.event.Event;
 import com.vanchutin.event.RestoreEvent;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-
+@Service
 public class ProcessEventService {
 
+    @Autowired
     private ComponentDao componentDao;
-
-    public ProcessEventService(ComponentDao componentDao){
-        this.componentDao = componentDao;
-    }
 
     public void process(Event event){
         if(event instanceof ErrorEvent){
@@ -24,10 +23,10 @@ public class ProcessEventService {
     }
 
     private void processErrorEvent(ErrorEvent event){
-        componentDao.updateStatus(event.getComponentId(), false);
+        componentDao.setStatusFalse(event.getDeviceId(), event.getComponentId());
     }
 
     private void processRestoreEvent(RestoreEvent event){
-       componentDao.updateStatus(event.getComponentId(), true);
+       componentDao.setStatusTrue(event.getDeviceId(), event.getComponentId());
     }
 }

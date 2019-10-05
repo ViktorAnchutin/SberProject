@@ -1,51 +1,47 @@
 package com.vanchutin;
 
-import com.vanchutin.dao.ComponentDao;
-import com.vanchutin.dao.ComponentDaoImpl;
 import com.vanchutin.dao.DeviceDao;
-import com.vanchutin.dao.DeviceDaoImpl;
 import com.vanchutin.event.ErrorEvent;
 import com.vanchutin.event.Event;
 import com.vanchutin.event.RestoreEvent;
-import com.vanchutin.model.Component;
-import com.vanchutin.model.Device;
-import com.vanchutin.model.utils.Status;
 import com.vanchutin.service.ApplicationService;
-import com.vanchutin.service.DeviceUpdaterService;
-import com.vanchutin.service.ProcessEventService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.jdbc.core.JdbcTemplate;
 
-import javax.persistence.*;
-import javax.persistence.criteria.*;
-import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Queue;
 
-public class Application {
-    public static void main(String[] args)
-    {
+@SpringBootApplication
+public class Application implements CommandLineRunner {
 
-        // init application and inject dependencies
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("com.vanchutin.model");
+	@Autowired
+	ApplicationService service;
 
-        ComponentDao componentDao = new ComponentDaoImpl(emf);
-        DeviceDao deviceDao = new DeviceDaoImpl(emf);
+	public static void main(String[] args) {
+		SpringApplication.run(Application.class, args);
+	}
 
-        ApplicationService service = new ApplicationService();
-        ProcessEventService processEventService = new ProcessEventService(componentDao);
-        DeviceUpdaterService deviceUpdaterService = new DeviceUpdaterService(deviceDao, componentDao);
-        service.setEventService(processEventService);
-        service.setUpdaterService(deviceUpdaterService);
+	@Override
+	public void run(String... args) throws Exception {
+		System.out.println("Hello");
 
-        // create event queue
-        Queue<Event> eventQueue = new LinkedList<Event>();
-        eventQueue.add(new ErrorEvent(48, 49));
-        eventQueue.add(new ErrorEvent(48, 50));
-        eventQueue.add(new ErrorEvent(48, 51));
-        eventQueue.add(new RestoreEvent(48, 51));
-        eventQueue.add(new RestoreEvent(48, 49));
-        eventQueue.add(new RestoreEvent(48, 50));
-        // process event queue
-        service.processEventQueue(eventQueue);
-    }
+		Queue<Event> eventQueue = new LinkedList<Event>();
+		eventQueue.add(new ErrorEvent(1, 1));
+		eventQueue.add(new ErrorEvent(1, 2));
+		eventQueue.add(new ErrorEvent(1, 3));
+		eventQueue.add(new RestoreEvent(1, 3));
+		eventQueue.add(new RestoreEvent(1, 2));
+		eventQueue.add(new RestoreEvent(1, 1));
+
+		// process event queue
+		service.processEventQueue(eventQueue);
+
+
+
+
+
+	}
 }

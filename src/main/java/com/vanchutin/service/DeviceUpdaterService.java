@@ -1,29 +1,31 @@
 package com.vanchutin.service;
 
+
 import com.vanchutin.dao.ComponentDao;
 import com.vanchutin.dao.DeviceDao;
 import com.vanchutin.model.Device;
 import com.vanchutin.model.utils.Status;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+@Service
 public class DeviceUpdaterService {
 
-    private static final Logger log = LoggerFactory.getLogger(DeviceUpdaterService.class);
+   private static final Logger log = LoggerFactory.getLogger(DeviceUpdaterService.class);
 
+    @Autowired
     private DeviceDao deviceDao;
 
+    @Autowired
     private ComponentDao componentDao;
 
-    public DeviceUpdaterService(DeviceDao deviceDao, ComponentDao componentDao){
-        this.deviceDao = deviceDao;
-        this.componentDao = componentDao;
-    }
 
-    public void update(int deviceId){
+    public void updateStatus(int deviceId){
 
         int allComponents = componentDao.countAll(deviceId);
-        int brokenComponents = componentDao.countByStatus(deviceId, false);
+        int brokenComponents = componentDao.countBroken(deviceId);
 
         Status newStatus = computeStatus(allComponents, brokenComponents);
         Status currentStatus = deviceDao.getStatus(deviceId);
