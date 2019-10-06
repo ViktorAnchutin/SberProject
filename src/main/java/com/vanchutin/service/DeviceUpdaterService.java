@@ -5,6 +5,7 @@ import com.vanchutin.dao.ComponentDao;
 import com.vanchutin.dao.DeviceDao;
 import com.vanchutin.model.Device;
 import com.vanchutin.model.utils.Status;
+import lombok.Setter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,10 +16,10 @@ public class DeviceUpdaterService {
 
    private static final Logger log = LoggerFactory.getLogger(DeviceUpdaterService.class);
 
-    @Autowired
+    @Autowired  @Setter
     private DeviceDao deviceDao;
 
-    @Autowired
+    @Autowired  @Setter
     private ComponentDao componentDao;
 
 
