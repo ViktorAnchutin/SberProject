@@ -1,6 +1,7 @@
 package com.vanchutin.service.processEvent;
 
 import com.vanchutin.event.Event;
+import com.vanchutin.service.processEvent.strategy.ProcessEventStrategy;
 import com.vanchutin.service.processEvent.strategy.ProcessEventStrategyFactory;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ public class ProcessEventService {
     ProcessEventStrategyFactory processEventStrategyFactory;
 
     public void process(Event event){
-        processEventStrategyFactory.getProcessStrategy(event).process(event);
+        ProcessEventStrategy strategy =  processEventStrategyFactory.getProcessStrategy(event);
+        strategy.process(event);
     }
 }
