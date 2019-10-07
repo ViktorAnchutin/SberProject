@@ -3,6 +3,7 @@ package com.vanchutin.service.processEvent.strategy;
 import com.vanchutin.event.ErrorEvent;
 import com.vanchutin.event.Event;
 import com.vanchutin.event.RestoreEvent;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
@@ -10,7 +11,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class ProcessEventStrategyFactory {
 
-    @Autowired
+    @Autowired @Setter
     ApplicationContext applicationContext;
 
     public ProcessEventStrategy getProcessStrategy(Event event){

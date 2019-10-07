@@ -18,15 +18,6 @@ import static org.junit.Assert.*;
 
 public class DeviceUpdaterServiceTest {
 
-    //create Mock for daoclasses
-    // set behavior
-    // check or verify actions
-
-
-    final int deviceId = 3;
-
-    Device device = new Device(deviceId, "Fake ATM", Status.normal);
-
     DeviceDao deviceDao = mock(DeviceDao.class);
 
     ComponentDao componentDao = mock(ComponentDao.class);
@@ -43,22 +34,25 @@ public class DeviceUpdaterServiceTest {
 
     @Test
     public void updateStatus() {
+
+        final int deviceId = 3;
+        final int brokenComponents = 4;
+        final int allComponents = 6;
+
+        Device device = new Device(deviceId, "Fake ATM", Status.normal);
+
         when(deviceDao.getStatus(deviceId)).thenReturn(Status.normal);
         when(deviceDao.getById(deviceId)).thenReturn(device);
-        when(componentDao.countAll(deviceId)).thenReturn(6);
-        when(componentDao.countBroken(deviceId)).thenReturn(4);
-        doAnswer(new Answer() {
-            @Override
-            public Object answer(InvocationOnMock invocationOnMock) throws Throwable {
-                Status newStatus = invocationOnMock.getArgument(1);
-                device.setStatus(newStatus);
-                return null;
-            }
+        when(componentDao.countAll(deviceId)).thenReturn(allComponents);
+        when(componentDao.countBroken(deviceId)).thenReturn(brokenComponents);
+        doAnswer(invocationOnMock -> {
+                            device.setStatus(invocationOnMock.getArgument(1));
+                            return null;
         }).when(deviceDao).updateStatus(eq(deviceId), any(Status.class));
 
+        //pass a device
         updaterService.updateStatus(deviceId);
+        //check if device status is changed properly
         assertEquals(Status.error, device.getStatus());
-
-
     }
 }
