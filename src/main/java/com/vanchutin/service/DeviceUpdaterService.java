@@ -6,15 +6,13 @@ import com.vanchutin.dao.DeviceDao;
 import com.vanchutin.model.Device;
 import com.vanchutin.model.utils.Status;
 import lombok.Setter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
+@Slf4j
 public class DeviceUpdaterService {
-
-   private static final Logger log = LoggerFactory.getLogger(DeviceUpdaterService.class);
 
     @Autowired  @Setter
     private DeviceDao deviceDao;
@@ -41,11 +39,11 @@ public class DeviceUpdaterService {
     private Status computeStatus(int allComponents, int brokenComponents){
         if(allComponents/2 < brokenComponents)
             return Status.error;
-        else
-            if (brokenComponents != 0)
-                return Status.warning;
-            else
-                return Status.normal;
+
+        if (brokenComponents != 0)
+            return Status.warning;
+
+        return Status.normal;
     }
 
 

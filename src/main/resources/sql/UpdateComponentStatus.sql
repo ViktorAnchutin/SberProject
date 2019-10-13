@@ -1,0 +1,1 @@
+UPDATE device_component SET component_status = :status WHERE device_id = :device_id AND component_id = :component_id

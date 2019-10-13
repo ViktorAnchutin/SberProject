@@ -1,53 +1,61 @@
 package com.vanchutin.dao;
 
+import com.vanchutin.annotation.ResourceSql;
 import com.vanchutin.model.Device;
 import com.vanchutin.model.utils.Status;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public class DeviceDao {
 
+    @ResourceSql("SelectAllDevices.sql")
+    private String selectAllTemplate;
 
-    private final String selectAllTemplate = "SELECT * FROM devices";
+    @ResourceSql("SelectDeviceStatus.sql")
+    private String selectStatusTemplate;
 
-    private final String selectStatusTemplate =     "SELECT status FROM devices " +
-                                                    "WHERE id = %d";
+    @ResourceSql("UpdateDeviceStatus.sql")
+    private String updateStatusTemplate;
 
-    private final String updateStatusTemplate =     "UPDATE devices " +
-                                                    "SET status = '%s' " +
-                                                    "WHERE id = %d";
-
-    private final String selectByIdTemplate =       "SELECT * FROM devices " +
-                                                    "WHERE id = %d";
-
-    private RowMapper<Device> deviceRowMapper = (rs, rowNum) -> new Device(
-                                                                        rs.getInt("id"),
-                                                                        rs.getString("name"),
-                                                                        Status.valueOf( rs.getString("status"))
-                                                                ) ;
+    @ResourceSql("SelectDeviceById.sql")
+    private String selectByIdTemplate;
 
     @Autowired
-    JdbcTemplate jdbcTemplate;
+    private RowMapper<Device> deviceRowMapper;
+
+    @Autowired
+    NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     public List<Device> getAll(){
-        return jdbcTemplate.query( selectAllTemplate, deviceRowMapper);
+        return namedParameterJdbcTemplate.query( selectAllTemplate, deviceRowMapper);
     }
 
     public Status getStatus(int deviceId){
-        return jdbcTemplate.queryForObject(String.format(selectStatusTemplate, deviceId), Status.class);
+        Map<String, Integer> parameters = new HashMap<String, Integer>();
+        parameters.put("id", deviceId);
+        return namedParameterJdbcTemplate.queryForObject(selectStatusTemplate, parameters, Status.class);
     }
 
     public void updateStatus(int deviceId, Status newStatus){
-        jdbcTemplate.update(String.format(updateStatusTemplate, String.valueOf(newStatus), deviceId));
+        MapSqlParameterSource parameters  = new MapSqlParameterSource();
+        parameters.addValue("status", String.valueOf(newStatus));
+        parameters.addValue("id", deviceId);
+        namedParameterJdbcTemplate.update(updateStatusTemplate, parameters);
     }
 
     public Device getById(int deviceId){
-        return jdbcTemplate.queryForObject(String.format(selectByIdTemplate, deviceId), deviceRowMapper);
+        Map<String, Integer> parameters = new HashMap<String, Integer>();
+        parameters.put("id", deviceId);
+        return namedParameterJdbcTemplate.queryForObject(selectByIdTemplate, parameters, deviceRowMapper);
     }
 
 

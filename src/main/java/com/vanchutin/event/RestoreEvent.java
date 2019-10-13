@@ -1,8 +1,12 @@
 package com.vanchutin.event;
 
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor
+
 public class RestoreEvent extends Event {
 
-    public RestoreEvent(){};
+
     public RestoreEvent(Integer deviceId, Integer componentId)
     {
         this.componentId = componentId;
@@ -24,5 +28,4 @@ public class RestoreEvent extends Event {
     public void setComponentId(Integer componentId) {
         this.componentId = componentId;
     }
-
 }

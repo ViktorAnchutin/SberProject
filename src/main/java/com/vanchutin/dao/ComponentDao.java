@@ -1,25 +1,32 @@
 package com.vanchutin.dao;
 
 
+import com.vanchutin.annotation.ResourceSql;
+import com.vanchutin.model.utils.Status;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
+
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 @Repository
 public class ComponentDao {
 
     @Autowired
-    JdbcTemplate jdbcTemplate;
+    NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
-    private final String updateStatusTemplate =     "UPDATE device_component " +
-                                                    "SET component_status = %s " +
-                                                    "WHERE device_id = %d AND component_id = %d";
+    @ResourceSql("UpdateComponentStatus.sql")
+    private String updateStatusTemplate;
 
-    private final String countAllTemplate =     "SELECT COUNT(*) FROM device_component " +
-                                                "WHERE device_id = %d";
+    @ResourceSql("CountAllComponents.sql")
+    private String countAllTemplate;
 
-    private final String countBrokenTemplate =  "SELECT COUNT(*) FROM device_component " +
-                                                "WHERE device_id = %d and component_status = '%s'";
+    @ResourceSql("CountBrokenComponents.sql")
+    private String countBrokenTemplate;
 
     public void  setStatusTrue(int deviceId, int componentId){
         setStatus(deviceId, componentId, true);
@@ -30,16 +37,23 @@ public class ComponentDao {
     }
 
     public int countAll(int deviceId){
-        return jdbcTemplate.queryForObject(String.format(countAllTemplate, deviceId), Integer.class);
+        Map<String, Integer> parameters = new HashMap<>();
+        parameters.put("id", deviceId);
+        return namedParameterJdbcTemplate.queryForObject(countAllTemplate, parameters, Integer.class);
     }
 
     public int countBroken(int deviceId){
-        return jdbcTemplate.queryForObject(String.format(countBrokenTemplate, deviceId, String.valueOf(false)), Integer.class);
+        MapSqlParameterSource parameters  = new MapSqlParameterSource();
+        parameters.addValue("status", false);
+        parameters.addValue("id", deviceId);
+        return namedParameterJdbcTemplate.queryForObject(countBrokenTemplate, parameters, Integer.class);
     }
 
     private void setStatus(int deviceId, int componentId, boolean status){
-        jdbcTemplate.update(String.format(updateStatusTemplate, status, deviceId, componentId));
+        MapSqlParameterSource parameters  = new MapSqlParameterSource();
+        parameters.addValue("status", status);
+        parameters.addValue("device_id", deviceId);
+        parameters.addValue("component_id", componentId);
+        namedParameterJdbcTemplate.update(updateStatusTemplate, parameters);
     }
-
-
 }
