@@ -1,0 +1,1 @@
+INSERT INTO devices (name, status) VALUES (:name, :status)

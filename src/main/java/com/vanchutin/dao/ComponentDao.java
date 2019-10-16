@@ -2,14 +2,11 @@ package com.vanchutin.dao;
 
 
 import com.vanchutin.annotation.ResourceSql;
-import com.vanchutin.model.utils.Status;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 

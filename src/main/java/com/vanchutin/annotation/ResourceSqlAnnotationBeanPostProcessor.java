@@ -21,6 +21,8 @@ public class ResourceSqlAnnotationBeanPostProcessor implements BeanPostProcessor
     @Override
     public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
 
+       // System.out.println("I'm here!!!!!!!!!!");
+
         Field[] fields = bean.getClass().getDeclaredFields();
         for(Field field : fields){
             ResourceSql annotation = field.getAnnotation(ResourceSql.class);
@@ -39,7 +41,13 @@ public class ResourceSqlAnnotationBeanPostProcessor implements BeanPostProcessor
         String currentDirectory = Paths.get("").toAbsolutePath().toString();
         String resourceFilePath = String.format("%s/src/main/resources/sql/%s",currentDirectory,fileName);
         try(BufferedReader reader = new BufferedReader(new FileReader(new File(resourceFilePath)))){
-            query = reader.readLine();
+            StringBuilder stringBuilder = new StringBuilder();
+            String line = null;
+            while ( (line = reader.readLine()) != null){
+                stringBuilder.append(line);
+                stringBuilder.append(" ");
+            }
+            query = stringBuilder.toString();
         } catch (IOException e){
             log.error(String.format("Failed to extract sql query from the file. %s", e));
         }

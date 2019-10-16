@@ -1,0 +1,1 @@
+select exists(select 1 from devices where id=:id OR name = :name)

@@ -40,7 +40,7 @@ public class Application implements CommandLineRunner {
 		eventQueue.add(eventFactory.getEvent(EventType.RESTORE, 1, 1));
 
 		// process event queue
-		service.processEventQueue(eventQueue);
+		//service.processEventQueue(eventQueue);
 
 
 

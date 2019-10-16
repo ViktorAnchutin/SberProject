@@ -9,9 +9,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 @Component
-public class DeviceMapper implements RowMapper {
+public class DeviceDaoMapper implements RowMapper<Device> {
     @Override
-    public Object mapRow(ResultSet rs, int i) throws SQLException {
+    public Device mapRow(ResultSet rs, int i) throws SQLException {
         return new Device(
                 rs.getInt("id"),
                 rs.getString("name"),
