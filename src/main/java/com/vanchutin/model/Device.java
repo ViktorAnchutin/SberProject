@@ -8,13 +8,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public @Data class Device {
 
-    public Device(int id, String name, Status status){
+    public Device(long id, String name, Status status){
         this.id = id;
         this.name = name;
         this.status = status;
     }
 
-    private Integer id;
+    private Long id;
 
     private String name;
 

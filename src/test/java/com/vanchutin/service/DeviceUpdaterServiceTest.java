@@ -2,8 +2,10 @@ package com.vanchutin.service;
 
 import com.vanchutin.dao.ComponentDao;
 import com.vanchutin.dao.DeviceDao;
+import com.vanchutin.exception.DeviceNotFoundException;
 import com.vanchutin.model.Device;
 import com.vanchutin.model.utils.Status;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -16,6 +18,7 @@ import static org.mockito.Mockito.*;
 
 import static org.junit.Assert.*;
 
+@Slf4j
 public class DeviceUpdaterServiceTest {
 
     DeviceDao deviceDao = mock(DeviceDao.class);
@@ -42,7 +45,11 @@ public class DeviceUpdaterServiceTest {
         Device device = new Device(deviceId, "Fake ATM", Status.normal);
 
         when(deviceDao.getStatus(deviceId)).thenReturn(Status.normal);
-        when(deviceDao.getById(deviceId)).thenReturn(device);
+        try{
+            when(deviceDao.getById(deviceId)).thenReturn(device);
+        } catch (DeviceNotFoundException e){
+            log.error(e.getMessage());
+        }
         when(componentDao.countAll(deviceId)).thenReturn(allComponents);
         when(componentDao.countBroken(deviceId)).thenReturn(brokenComponents);
         doAnswer(invocationOnMock -> {
@@ -53,6 +60,6 @@ public class DeviceUpdaterServiceTest {
         //pass a device
         updaterService.updateStatus(deviceId);
         //check if device status is changed properly
-        assertEquals(Status.error, device.getStatus());
+        verify(deviceDao, times(1)).updateStatus(deviceId, Status.error);
     }
 }

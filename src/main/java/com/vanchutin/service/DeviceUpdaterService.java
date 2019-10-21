@@ -3,6 +3,7 @@ package com.vanchutin.service;
 
 import com.vanchutin.dao.ComponentDao;
 import com.vanchutin.dao.DeviceDao;
+import com.vanchutin.exception.DeviceNotFoundException;
 import com.vanchutin.model.Device;
 import com.vanchutin.model.utils.Status;
 import lombok.Setter;
@@ -31,7 +32,13 @@ public class DeviceUpdaterService {
 
         if(currentStatus != newStatus) {
             deviceDao.updateStatus(deviceId, newStatus);
-            Device device = deviceDao.getById(deviceId);
+            Device device = null;
+            try {
+                device = deviceDao.getById(deviceId);
+            } catch (DeviceNotFoundException e){
+                log.error(e.getMessage());
+                return;
+            }
             printStatus(device);
         }
     }

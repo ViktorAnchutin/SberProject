@@ -3,6 +3,7 @@ package com.vanchutin.service.rest;
 import com.vanchutin.annotation.ResourceSql;
 import com.vanchutin.annotation.ResourceSqlAnnotationBeanPostProcessor;
 import com.vanchutin.dto.DeviceDto;
+import com.vanchutin.exception.DeviceNotFoundException;
 import com.vanchutin.model.Device;
 import com.vanchutin.model.utils.Status;
 import org.junit.*;
@@ -20,9 +21,6 @@ import static org.junit.Assert.*;
 @SpringBootTest
 public class DeviceServiceTest {
 
-   // @Autowired
-   // private ResourceSqlAnnotationBeanPostProcessor resourceSqlAnnotationBeanPostProcessor;
-
     @Autowired
     DeviceService deviceService;
 
@@ -38,7 +36,6 @@ public class DeviceServiceTest {
     @Before
     public void createTable(){
       jdbcTemplate.execute(createTestTableQuery);
-
     }
 
     @After
@@ -48,7 +45,8 @@ public class DeviceServiceTest {
 
     @Test
     public void getById() {
-        String name = deviceService.getById(1).getName();
+        String name = null;
+        name = deviceService.getById(1).get().getName();
         assertEquals("ATM1", name);
     }
 

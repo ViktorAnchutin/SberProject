@@ -11,4 +11,9 @@ public abstract class Event {
     public abstract Integer getComponentId() ;
 
     public abstract void setComponentId(Integer componentId) ;
+
+    @Override
+    public String toString() {
+        return String.format("Event from device id: %d, component id: %d", deviceId, componentId);
+    }
 }

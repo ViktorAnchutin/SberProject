@@ -2,7 +2,9 @@ package com.vanchutin.service.rest;
 
 import com.vanchutin.dao.DeviceDao;
 import com.vanchutin.dto.DeviceDto;
+import com.vanchutin.exception.DeviceNotFoundException;
 import com.vanchutin.model.Device;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,11 +12,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 @Service
 @Transactional
+@Slf4j
 public class DeviceService {
 
     @Autowired
@@ -23,9 +27,15 @@ public class DeviceService {
     @Autowired
     ModelMapper modelMapper;
 
-    public DeviceDto getById(int id){
-        Device device = deviceDao.getById(id);
-        return modelMapper.map(device, DeviceDto.class);
+    public Optional<DeviceDto> getById(long id){
+        Device device = null;
+        try{
+           device = deviceDao.getById(id);
+        } catch (DeviceNotFoundException e){
+            log.error(e.getMessage());
+            return Optional.empty();
+        }
+        return Optional.of(modelMapper.map(device, DeviceDto.class));
     }
 
     public long createDevice(DeviceDto deviceDto){
@@ -51,5 +61,4 @@ public class DeviceService {
             return true;
         return false;
     }
-
 }

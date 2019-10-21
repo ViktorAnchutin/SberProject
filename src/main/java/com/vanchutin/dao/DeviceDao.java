@@ -1,16 +1,17 @@
 package com.vanchutin.dao;
 
 import com.vanchutin.annotation.ResourceSql;
+import com.vanchutin.exception.DeviceNotFoundException;
 import com.vanchutin.model.Device;
 import com.vanchutin.model.mapper.DeviceDaoMapper;
 import com.vanchutin.model.utils.Status;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.List;
@@ -60,10 +61,16 @@ public class DeviceDao {
         namedParameterJdbcTemplate.update(updateStatusTemplate, parameters);
     }
 
-    public Device getById(int deviceId){
-        Map<String, Integer> parameters = new HashMap<String, Integer>();
+    public Device getById(long deviceId) throws DeviceNotFoundException{
+        Map<String, Long> parameters = new HashMap<String, Long>();
         parameters.put("id", deviceId);
-        return namedParameterJdbcTemplate.queryForObject(selectByIdTemplate, parameters, deviceRowMapper);
+        Device device =null;
+        try{
+            device = namedParameterJdbcTemplate.queryForObject(selectByIdTemplate, parameters, deviceRowMapper);
+        } catch (EmptyResultDataAccessException e){
+            throw new DeviceNotFoundException(String.format("Device with id '%d' was not found", deviceId));
+        }
+        return device;
     }
 
     public long save(Device device){
