@@ -1,6 +1,6 @@
 package com.vanchutin;
 
-import com.vanchutin.receiver.MessageReceiver;
+import com.vanchutin.listener.MessageListener;
 import org.modelmapper.ModelMapper;
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
@@ -49,7 +49,7 @@ public class AppConfig {
     }
 
     @Bean
-    MessageListenerAdapter listenerAdapter(MessageReceiver receiver) {
+    MessageListenerAdapter listenerAdapter(MessageListener receiver) {
         return new MessageListenerAdapter(receiver, "receiveMessage");
     }
 

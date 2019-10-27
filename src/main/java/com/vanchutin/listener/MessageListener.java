@@ -1,4 +1,4 @@
-package com.vanchutin.receiver;
+package com.vanchutin.listener;
 
 import com.vanchutin.event.Event;
 import com.vanchutin.event.EventFactory;
@@ -11,7 +11,7 @@ import java.util.Optional;
 
 @Component
 @Slf4j
-public class MessageReceiver {
+public class MessageListener {
 
     @Autowired
     ApplicationService applicationService;

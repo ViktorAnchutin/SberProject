@@ -1,4 +1,4 @@
-package com.vanchutin.receiver;
+package com.vanchutin.listener;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
