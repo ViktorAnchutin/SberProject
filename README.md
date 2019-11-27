@@ -1,5 +1,5 @@
 ### ATM events processing study project
-![Image project](https://github.com/ViktorAnchutin/SberProject/blob/master/img/prj.png)
+![Image project](https://github.com/ViktorAnchutin/SberProject/blob/master/img/prjWithRest.png)
 Agent : https://github.com/ViktorAnchutin/Agent
 
 Producer : https://github.com/ViktorAnchutin/Producer
